@@ -1,0 +1,90 @@
+{
+  "agenda_medico": {
+    "1": {
+      "data": "2024-04-20",
+      "hora": "09:00",
+      "reservado": true,
+      "paciente": {
+        "id": 1,
+        "nome": "Jo\u00c3\u00a3o Silva",
+        "cpf": "123.456.789-00",
+        "sintomas": "Dor de cabe\u00c3\u00a7a e febre"
+      }
+    },
+    "2": {
+      "data": "2024-04-20",
+      "hora": "10:00",
+      "reservado": true,
+      "paciente": {
+        "id": 2,
+        "nome": "Maria Oliveira",
+        "cpf": "987.654.321-00",
+        "sintomas": "Dor de garganta e tosse"
+      }
+    },
+    "3": {
+      "data": "2024-04-21",
+      "hora": "09:00",
+      "reservado": false
+    },
+    "4": {
+      "data": "2024-04-21",
+      "hora": "10:00",
+      "reservado": true,
+      "paciente": {
+        "id": "558893697283",
+        "nome": "miguel martins",
+        "cpf": "05655892300",
+        "sintomas": "dor nas costas"
+      }
+    },
+    "5": {
+      "data": "2024-04-21",
+      "hora": "11:00",
+      "reservado": true,
+      "paciente": {
+        "id": "242389748",
+        "nome": "MIGUEL",
+        "cpf": "00000",
+        "sintomas": "UIUIUI"
+      }
+    },
+    "6": {
+      "data": "2024-04-22",
+      "hora": "14:30",
+      "reservado": true,
+      "paciente": {
+        "id": 3,
+        "nome": "Pedro Santos",
+        "cpf": "111.222.333-00",
+        "sintomas": "Dor de est\u00c3\u00b4mago"
+      }
+    }
+  },
+  "pacientes": [
+    {
+      "id": 1,
+      "nome": "Jo\u00c3\u00a3o Silva",
+      "cpf": "123.456.789-00",
+      "data": "2024-04-20",
+      "hora": "10:00",
+      "sintomas": "Dor de cabe\u00c3\u00a7a e febre"
+    },
+    {
+      "id": 2,
+      "nome": "Maria Oliveira",
+      "cpf": "987.654.321-00",
+      "data": "2024-04-22",
+      "hora": "15:30",
+      "sintomas": "Dor de garganta e tosse"
+    },
+    {
+      "id": 3,
+      "nome": "Pedro Santos",
+      "cpf": "111.222.333-00",
+      "data": "2024-04-22",
+      "hora": "14:30",
+      "sintomas": "Dor de est\u00c3\u00b4mago"
+    }
+  ]
+}
