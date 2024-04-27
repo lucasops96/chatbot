@@ -1,6 +1,7 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from twilio.twiml.messaging_response import MessagingResponse
 from dotenv import load_dotenv
+import openai
 import os
 import json
 
@@ -9,6 +10,9 @@ load_dotenv()
 app = Flask(__name__)
 
 JSON_FILE = 'dados.json'
+
+key_chatgpt =  os.getenv('CHAVE_API')
+openai.api_key = key_chatgpt
 
 def load_agenda():
     try:
@@ -51,9 +55,9 @@ def process_message(userid,msg_body):
                 "3. Relatar sintomas \n"
                 "4. Ver consultas já marcadas \n")
     elif '1' == msg_body:
-        response_message = "Estes são nossos profissionais:\nPara consultar Datas e horários disponíveis digite 'agendar:ID do medico' ou digite 'Oi' para voltar o menu. \n"
+        response_message = "Estes são nossos profissionais:\nPara consultar Datas e horários disponíveis digite 'agendar:ID do profissional' ou digite 'Oi' para voltar ao menu. \n\n"
         for prof in list_profissionais():
-            response_message += f"ID: {prof['id']}, Nome: {prof['nome']}, Especialidade: {prof['especialidade']}\n"
+            response_message += f" - ID: {prof['id']}, Nome: {prof['nome']}, Especialidade: {prof['especialidade']}\n"
         return response_message
     
     elif 'agendar' in msg_body:
@@ -62,16 +66,15 @@ def process_message(userid,msg_body):
         profissional = get_profissional(id_prof)
         available_slots = list_available_slots(id_prof)
         if available_slots:
-            response_message = f"Datas e horários disponíveis para marcar uma consulta com {profissional['nome']} - {profissional['especialidade']}:\nResponda com o 'ID da consulta disponível-Seu nome-Seu CPF-Seu sintomas' para marcar consulta ou digite 'Oi' para voltar o menu. \n"
+            response_message = f"Datas e horários disponíveis com {profissional['nome']} - {profissional['especialidade']}:\nResponda com o 'ID da consulta disponível-Seu nome-Seu CPF-Seu sintomas' para marcar consulta ou digite 'Oi' para voltar ao menu. \n\n"
             for slot in available_slots:
-                response_message += f"ID: {slot['id']}, Data: {slot['date']}, Hora: {slot['time']}\n"
+                response_message += f" - ID: {slot['id']}, Data: {slot['date']}, Hora: {slot['time']}\n"
             return response_message
         else:
             return "Desculpe, não há datas e horários disponíveis para marcar uma consulta no momento."
     
     elif '3' == msg_body:
-        return "Por favor, descreva seus sintomas para que eu possa ajudar a avaliar sua situação."
-    
+        return ''
     elif '-' in msg_body:
         parts = msg_body.upper().split('-')
         if len(parts) == 4:
@@ -118,10 +121,22 @@ def bot():
     print(resp)
     return str(resp)
 
-@app.route('/')
+@app.route('/',methods=['GET'])
 def index():
-    return 'Tá funcionando o Flask'
+    msg_body = 'Gengiva inflamada'
+    print(key_chatgpt)
+    try:
+        response = openai.chat.completions.create(
+            model="davinci-002",
+            messages=[
+                {"role": "user", "content":f"A mensagem descrita são sintomas de uma paciente, relate um diagnóstico prévio de no máximo 5 linhas para os sintomas, mas é claro que apenas para influenciar o paciente a procurar um profissional da sáude:{msg_body}" },
+            ]
+        )
 
+        return response.choices[0].message.content
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run()
